@@ -26,6 +26,8 @@ public class EnemyFollow : MonoBehaviour
 
         Vector2 direction = (player.position - transform.position).normalized;
         transform.position += (Vector3)(direction * currentSpeed * Time.deltaTime);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
