@@ -39,6 +39,17 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Time.timeScale = 0f;
+
+        // FERMA TUTTI I SUONI DI GIOCO
+        AudioSource[] allAudio = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource audio in allAudio)
+        {
+            audio.Stop();
+        }
+
+        // SUONO GAME OVER
+        GetComponents<AudioSource>()[1].Play();
+
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
     }
