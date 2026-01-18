@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public TextMeshProUGUI scoreText;
     public GameObject gameOverPanel;
+    public TextMeshProUGUI timeText;
+    private float elapsedTime = 0f;
 
     private void Awake()
     {
@@ -23,6 +25,21 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
+    }
+
+    void Update()
+    {
+        elapsedTime += Time.deltaTime;
+        UpdateTimeUI();
+    }
+
+
+    void UpdateTimeUI()
+    {
+        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+
+        timeText.text = $"TIME: {minutes:00}:{seconds:00}";
     }
 
     public void AddScore(int value)
