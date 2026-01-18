@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,11 +12,18 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private AudioSource engineAudio;
+    private Camera cam;
+
+    private Vector2 movement;
+    private Vector2 targetPosition;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         engineAudio = GetComponent<AudioSource>();
+        cam = Camera.main;
+
+        targetPosition = rb.position;
 
         engineAudio.loop = true;
         engineAudio.Play();
@@ -23,21 +31,42 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
+        HandleTouchInput();
 
-        Vector2 movement = new Vector2(moveX, moveY);
-        rb.velocity = movement * speed;
+        Vector2 direction = targetPosition - rb.position;
 
-        // Per "ruotare" la macchina
+        if (direction.magnitude > 0.1f)
+            movement = direction.normalized;
+        else
+            movement = Vector2.zero;
+
+        // Rotazione macchina
         if (movement != Vector2.zero)
         {
             float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
         }
 
-        // Audio del motore con pitch dinamico (idle -> drive)
+        // Audio motore
         float targetPitch = movement.magnitude > 0.1f ? drivePitch : idlePitch;
         engineAudio.pitch = Mathf.Lerp(engineAudio.pitch, targetPitch, Time.deltaTime * pitchSmooth);
+    }
+
+    void FixedUpdate()
+    {
+        rb.velocity = movement * speed;
+    }
+
+    void HandleTouchInput()
+    {
+        if (Pointer.current == null)
+            return;
+
+        if (Pointer.current.press.isPressed)
+        {
+            Vector2 screenPos = Pointer.current.position.ReadValue();
+            Vector3 worldPos = cam.ScreenToWorldPoint(screenPos);
+            targetPosition = new Vector2(worldPos.x, worldPos.y);
+        }
     }
 }
