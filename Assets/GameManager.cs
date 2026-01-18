@@ -62,14 +62,14 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        // FERMA TUTTI I SUONI DI GIOCO
+        // Ferma tutti i suoni del gioco
         AudioSource[] allAudio = FindObjectsOfType<AudioSource>();
         foreach (AudioSource audio in allAudio)
         {
             audio.Stop();
         }
 
-        // SUONO GAME OVER
+        // Suono GAME OVER
         GetComponents<AudioSource>()[1].Play();
 
         if (score > highScore)

@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
         engineAudio = GetComponent<AudioSource>();
 
         engineAudio.loop = true;
-        engineAudio.Play(); // parte subito al minimo
+        engineAudio.Play();
     }
 
     void Update()
@@ -29,14 +29,14 @@ public class PlayerMovement : MonoBehaviour
         Vector2 movement = new Vector2(moveX, moveY);
         rb.velocity = movement * speed;
 
-        // Rotazione
+        // Per "ruotare" la macchina
         if (movement != Vector2.zero)
         {
             float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
         }
 
-        // AUDIO MOTORE CON PITCH DINAMICO
+        // Audio del motore con pitch dinamico (idle -> drive)
         float targetPitch = movement.magnitude > 0.1f ? drivePitch : idlePitch;
         engineAudio.pitch = Mathf.Lerp(engineAudio.pitch, targetPitch, Time.deltaTime * pitchSmooth);
     }

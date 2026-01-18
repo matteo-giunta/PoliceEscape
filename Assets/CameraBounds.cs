@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraBounds : MonoBehaviour
 {
-    public float thickness = 1f; // spessore dei bordi
+    public float thickness = 1f; // Spessore dei bordi
 
     void Start()
     {

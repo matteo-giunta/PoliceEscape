@@ -4,7 +4,6 @@ using TMPro;
 public class BlinkText : MonoBehaviour
 {
     public float blinkSpeed = 1f;
-
     private TextMeshProUGUI text;
     private float timer;
 
