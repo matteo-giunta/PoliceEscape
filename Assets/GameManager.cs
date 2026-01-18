@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public TextMeshProUGUI timeText;
     private float elapsedTime = 0f;
+    public TextMeshProUGUI finalScoreText;
+    public TextMeshProUGUI finalTimeText;
 
     private void Awake()
     {
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1f;
         UpdateScoreUI();
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
@@ -32,7 +35,6 @@ public class GameManager : MonoBehaviour
         elapsedTime += Time.deltaTime;
         UpdateTimeUI();
     }
-
 
     void UpdateTimeUI()
     {
@@ -69,6 +71,11 @@ public class GameManager : MonoBehaviour
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
+
+        finalScoreText.text = "SCORE: " + score.ToString("D3");
+        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+        finalTimeText.text = $"TIME: {minutes:00}:{seconds:00}";
     }
 
     public void RestartGame()
